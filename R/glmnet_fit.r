@@ -22,7 +22,8 @@ glmnet_fit = function(X, y, lambda, alpha=1, family=binomial, maxit=500,
                       beta_update=coordinate_descent) {
   converged = FALSE
   for(i in 1:maxit) {
-    eta      = X %*% beta
+    # Note that there aren't sparse family functions.
+    eta      = as.vector(X %*% beta)
     g        = family()$linkinv(eta)
     gprime   = family()$mu.eta(eta)
     z        = eta + (y - g) / gprime

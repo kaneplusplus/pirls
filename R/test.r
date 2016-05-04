@@ -11,8 +11,8 @@ source("glmnet_fit.r")
 x=matrix(rnorm(100*20),100,ncol=20)
 y=rnorm(100)
 fit1 = glmnet(x, y, standardize=FALSE, intercept=FALSE)
-lambdas = fit1$lambdas
-fit2_betas = foreach(lambda=lambdas, .combine=cbind) %dopar% {
+lambdas = fit1$lambda
+fit2_betas = foreach(lambda=lambdas, .combine=cbind) %do% {
   glmnet_fit(x, y, lambda=lambda, family=gaussian)$beta
 }
 beta_diff = (fit1$beta - fit2_betas)^2
@@ -32,18 +32,23 @@ for (j in num_cols) {
   lambda = lambdas[round(length(lambdas)/2)]
   glmnet_times = c(glmnet_times, 
     system.time({
-      glmnet(x, y, standardize=FALSE, lambda=lambda, intercept=FALSE)
+      a = glmnet(x, y, standardize=FALSE, lambda=lambda, intercept=FALSE)
     })[3])
 
   glmnet_fit_times = c(glmnet_fit_times,
     system.time({
-      glmnet_fit(x, y, lambda=lambda, family=gaussian)
+      b = glmnet_fit(x, y, lambda=lambda, family=gaussian)
     })[3])
-  print(j)
+  print("a")
+  print(sd(y - x %*% a$beta)) 
+  print("b")
+  print(sd(y - x %*% b$beta))
 }
 
-
 #binomial
+x=matrix(rnorm(100*20),100,ncol=20)
 g2=sample(1:2,100,replace=TRUE)
-fit1 = glmnet(x,g2,family="binomial", standardize=FALSE, la)
-
+fit1 = glmnet(x,g2,family="binomial", standardize=FALSE, intercept=FALSE)
+lambdas = fit1$lambda
+lambda = lambdas[length(round(lambdas))/2]
+fit2 = glmnet_fit(x, g2-1, family=binomial, lambda=lambda)
