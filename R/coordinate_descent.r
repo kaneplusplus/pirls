@@ -21,13 +21,16 @@ coordinate_descent = function(X, W, z, lambda, alpha, beta, maxit) {
     quad_loss_old = quad_loss
     beta = update_coordinates(X, W, z, lambda, alpha, beta)
     quad_loss = quadratic_loss(X, W, z, lambda, alpha, beta)
-    if(quad_loss >= quad_loss_old) break
+    if(quad_loss >= quad_loss_old) {
+      beta = beta_old
+      break
+    }
+    if (quad_loss == -Inf) {
+      break
+    }
   }
-  if (i == maxit && 
-      quad_loss <= quad_loss_old && 
-      sqrt(as.vector(Matrix::crossprod(beta-beta_old))) >= tol) {
+  if (i == maxit && quad_loss <= quad_loss_old) {
     warning("Coordinate descent did not converge.")
-    beta_old = beta
   }
-  beta_old
+  beta
 }
