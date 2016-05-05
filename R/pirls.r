@@ -1,7 +1,7 @@
 
-#' Fit a GLM with elasticnet regularization
+#' Fit a Penalized Iteratively Reweighted Least Squares (PIRLS) model
 #'
-#' 'glmnet_fit' is used to fit the generalized linear model using penalized
+#' 'pirls' is used to fit the generalized linear model using penalized
 #' maximum likelihood based on the model matrix.
 #' @param X the model matrix.
 #' @param y the response.
@@ -17,7 +17,7 @@
 #' @param beta_update a function for optimizing the slope coefficients
 #' for the current weight matrix. Default is coordinate_descent.
 #' @export
-glmnet_fit = function(X, y, lambda, alpha=1, family=binomial, maxit=500, 
+pirls = function(X, y, lambda, alpha=1, family=binomial, maxit=500, 
                       tol=1e-8, beta=spMatrix(nrow=ncol(X), ncol=1), 
                       beta_update=coordinate_descent) {
   converged = FALSE
