@@ -1,3 +1,7 @@
+#' @useDynLib pirls
+#' @importFrom Rcpp sourceCpp
+NULL
+
 
 #' Fit a Penalized Iteratively Reweighted Least Squares (PIRLS) model
 #'

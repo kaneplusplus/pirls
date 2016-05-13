@@ -55,3 +55,23 @@ lambda = lambdas[length(round(lambdas))/2]
 fit2 = pirls(x, g2-1, family=binomial, lambda=lambda)
 cbind(fit1$beta[,length(round(lambdas))/2], fit2$beta)
 
+
+# Soft threshold testing
+RcppParallel::setThreadOptions(numThreads = 1)
+library(Matrix)
+library(devtools)
+document()
+nrow = 100
+nnzs = round(nrow / 10)
+sp_mat = spMatrix(ncol=1, nrow=nrow)
+nzs = sample(1:nrow, nnzs)
+
+X = matrix(rnorm(100*10), nrow=100, ncol=10)
+W = as(diag(100), "dgCMatrix")
+z = matrix(rnorm(100), ncol=1)
+lambda = 0.3
+alpha = 1
+beta = as(matrix(0, nrow=10, ncol=1), "dgCMatrix")
+
+c_update_coordinates(X, W, z, lambda, alpha, beta)
+update_coordinates(X, diag(W), z, lambda, alpha, beta)

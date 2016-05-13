@@ -1,11 +1,15 @@
-Package: glmnetlib
+Package: pirls
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: Penalized Iteratively Reweighted Least Squares
+Version: 0.0.1
 Date: 2016-05-04
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: More about what it does (maybe more than one line)
+Author: Taylor Arnold, Michael J. Kane
+Maintainer: Michael J. Kane <kaneplusplus@gmail.com>
+Description: Fit generalized linear models via penalized maximum likelihood and
+    iteratively reweighted least squares.
 License: GPL (>= 2)
-Imports: Rcpp (>= 0.12.4)
-LinkingTo: Rcpp
+Imports:
+    Rcpp (>= 0.12.4)
+SystemRequirements: C++11
+LinkingTo: Rcpp, RcppArmadillo, BH, RcppParallel
+RoxygenNote: 5.0.1

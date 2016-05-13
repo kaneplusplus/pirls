@@ -8,7 +8,7 @@ update_coordinates = function(X, W, z, lambda, alpha, beta) {
 }
 
 quadratic_loss = function(X, W=1, z, lambda, alpha, beta) {
-  nrow(X)/2 * sum(W*(z - X %*% beta)^2) - 
+  1/nrow(X)/2 * sum(W*(z - X %*% beta)^2) - 
       lambda * ((1-alpha) * sum(beta^2)/2 + alpha * sum(abs(beta)))
 }
 
