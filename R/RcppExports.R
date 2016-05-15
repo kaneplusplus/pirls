@@ -13,3 +13,7 @@ c_quadratic_loss <- function(X, W, z, lambda, alpha, beta) {
     .Call('pirls_c_quadratic_loss', PACKAGE = 'pirls', X, W, z, lambda, alpha, beta)
 }
 
+c_coordinate_descent <- function(X, W, z, lambda, alpha, beta, active_cols, maxit = 1000L) {
+    .Call('pirls_c_coordinate_descent', PACKAGE = 'pirls', X, W, z, lambda, alpha, beta, active_cols, maxit)
+}
+

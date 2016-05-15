@@ -46,6 +46,14 @@ for (j in num_cols) {
   print(sd(y - x %*% b$beta))
 }
 
+Rprof(append=FALSE, interval=0.02, memory.profiling=TRUE, gc.profiling=TRUE, 
+      line.profiling = TRUE)
+b = pirls(x, y, lambda=lambda, family=gaussian)
+Rprof(NULL)
+
+b = pirls(x, y, lambda=lambda, family=gaussian, 
+          beta_update=c_coordiante_descent)
+
 #binomial
 x=matrix(rnorm(100*20),100,ncol=20)
 g2=sample(1:2,100,replace=TRUE)

@@ -53,3 +53,21 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// c_coordinate_descent
+arma::sp_mat c_coordinate_descent(arma::mat X, arma::sp_mat W, arma::mat z, double lambda, double alpha, arma::sp_mat beta, arma::uvec active_cols, unsigned int maxit);
+RcppExport SEXP pirls_c_coordinate_descent(SEXP XSEXP, SEXP WSEXP, SEXP zSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP active_colsSEXP, SEXP maxitSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::sp_mat >::type W(WSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< arma::sp_mat >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< arma::uvec >::type active_cols(active_colsSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type maxit(maxitSEXP);
+    __result = Rcpp::wrap(c_coordinate_descent(X, W, z, lambda, alpha, beta, active_cols, maxit));
+    return __result;
+END_RCPP
+}

@@ -119,3 +119,10 @@ double c_quadratic_loss(arma::mat X, arma::sp_mat W,
   return quadratic_loss(X, W, z, lambda, alpha, beta);
 }
 
+// [[Rcpp::export]]
+arma::sp_mat c_coordinate_descent(arma::mat X, arma::sp_mat W, 
+  arma::mat z, double lambda, double alpha, arma::sp_mat beta, 
+  arma::uvec active_cols, unsigned int maxit=1000) {
+  return coordinate_descent(X, W, z, lambda, alpha, beta, active_cols, maxit);
+}
+

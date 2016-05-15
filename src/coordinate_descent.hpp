@@ -28,25 +28,31 @@ double quadratic_loss(const ModelMatrixType &X, const WeightMatrixType &W,
     lambda * ((1-alpha) * accu(square(beta))/2 * alpha * accu(abs(beta)));
 }
 
-//template <typename ModelMatrixType, typename WeightMatrixType, 
-//          typename VectorType, typename BetaMatrixType>
-//BetaMatrixType generic_coordinate_descent(const ModelMatrixType &X, 
-//  const WeightMatrixType &W, const VectorType &z, const double &lambda,
-//  const double &alpha, const BetaMatrixType &beta, unsigned int maxit) 
-//{
-//  double quad_loss = quadratic_loss(X, W, z, lambda, alpha, beta, maxit);
-//  double quad_loss_old;
-//  BetaMatrixType beta_old(beta);
-//  for (unsigned int i=0; i < maxit; ++i) {
-//    beta_old = beta;
-//    quad_loss_old = quad_loss;
-//    beta = update_coordinates(X, W, z, lambda, alpha, beta);
-//    quad_loss = quadratic_loss(X, W, z, lambda, alpha, beta, maxit);
-//    if (quad_loss >= quad_loss_old) {
-//      beta = beta_old;
-//      break;
-//    }
-//  }
-//}
+template <typename ModelMatrixType, typename WeightMatrixType, 
+          typename RealVectorType, typename BetaMatrixType, 
+          typename UIntVectorType>
+BetaMatrixType coordinate_descent(const ModelMatrixType &X, 
+  const WeightMatrixType &W, const RealVectorType &z, const double &lambda,
+  const double &alpha, BetaMatrixType beta, 
+  const UIntVectorType &active_cols, unsigned int maxit)
+{
+  double thresh = accu(W) * lambda * alpha;
+  double quad_loss = quadratic_loss(X, W, z, lambda, alpha, beta);
+  double quad_loss_old;
+  BetaMatrixType beta_old(beta);
+  for (unsigned int i=0; i < maxit; ++i) {
+    beta_old = beta;
+    quad_loss_old = quad_loss;
+    for (auto it=active_cols.begin(); it != active_cols.end(); ++i)
+      beta(*it, 0) = update_coordinate(*it, X, W, z, lambda, alpha,
+                                       beta_old, thresh);
+    quad_loss = quadratic_loss(X, W, z, lambda, alpha, beta);
+    if (quad_loss >= quad_loss_old) {
+      beta = beta_old;
+      break;
+    }
+  }
+  return beta;
+}
 
 
