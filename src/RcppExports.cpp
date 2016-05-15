@@ -6,20 +6,22 @@
 
 using namespace Rcpp;
 
-// doubleSparseMatrix
-arma::sp_mat doubleSparseMatrix(arma::sp_mat m);
-RcppExport SEXP pirls_doubleSparseMatrix(SEXP mSEXP) {
+// c_safe_filter
+arma::uvec c_safe_filter(arma::mat X, arma::mat z, double lambda);
+RcppExport SEXP pirls_c_safe_filter(SEXP XSEXP, SEXP zSEXP, SEXP lambdaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< arma::sp_mat >::type m(mSEXP);
-    __result = Rcpp::wrap(doubleSparseMatrix(m));
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type z(zSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    __result = Rcpp::wrap(c_safe_filter(X, z, lambda));
     return __result;
 END_RCPP
 }
 // c_update_coordinates
-arma::sp_mat c_update_coordinates(arma::mat X, arma::sp_mat W, arma::mat z, double lambda, double alpha, arma::sp_mat beta, bool parallel);
-RcppExport SEXP pirls_c_update_coordinates(SEXP XSEXP, SEXP WSEXP, SEXP zSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP parallelSEXP) {
+arma::sp_mat c_update_coordinates(arma::mat X, arma::sp_mat W, arma::mat z, double lambda, double alpha, arma::sp_mat beta, bool parallel, unsigned int grain_size);
+RcppExport SEXP pirls_c_update_coordinates(SEXP XSEXP, SEXP WSEXP, SEXP zSEXP, SEXP lambdaSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP parallelSEXP, SEXP grain_sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -30,7 +32,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
     Rcpp::traits::input_parameter< arma::sp_mat >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< bool >::type parallel(parallelSEXP);
-    __result = Rcpp::wrap(c_update_coordinates(X, W, z, lambda, alpha, beta, parallel));
+    Rcpp::traits::input_parameter< unsigned int >::type grain_size(grain_sizeSEXP);
+    __result = Rcpp::wrap(c_update_coordinates(X, W, z, lambda, alpha, beta, parallel, grain_size));
     return __result;
 END_RCPP
 }

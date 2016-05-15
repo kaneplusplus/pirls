@@ -57,21 +57,28 @@ cbind(fit1$beta[,length(round(lambdas))/2], fit2$beta)
 
 
 # Soft threshold testing
-RcppParallel::setThreadOptions(numThreads = 1)
+RcppParallel::setThreadOptions(numThreads = 4)
 library(Matrix)
 library(devtools)
 document()
-nrow = 100
-nnzs = round(nrow / 10)
-sp_mat = spMatrix(ncol=1, nrow=nrow)
-nzs = sample(1:nrow, nnzs)
+nrows = 10
+ncols = 100
+sp_mat = spMatrix(ncol=1, nrow=nrows)
 
-X = matrix(rnorm(100*10), nrow=100, ncol=10)
-W = as(diag(100), "dgCMatrix")
-z = matrix(rnorm(100), ncol=1)
+X = matrix(rnorm(nrows*ncols), nrow=nrows, ncol=ncols)
+W = as(diag(nrows), "dgCMatrix")
+z = matrix(rnorm(nrows), ncol=1)
 lambda = 0.3
 alpha = 1
-beta = as(matrix(0, nrow=10, ncol=1), "dgCMatrix")
+beta = as(matrix(0, nrow=ncols, ncol=1), "dgCMatrix")
 
-c_update_coordinates(X, W, z, lambda, alpha, beta)
-update_coordinates(X, diag(W), z, lambda, alpha, beta)
+system.time({
+  cuc = c_update_coordinates(X, W, z, lambda, alpha, beta, parallel=FALSE,
+                             grain_size=100)})
+system.time({
+  uc = update_coordinates(X, diag(W), z, lambda, alpha, beta)})
+
+c_quadratic_loss(X, W, z, lambda, alpha, beta)
+quadratic_loss(X, diag(W), z, lambda, alpha, beta)
+
+c_safe_filter(X, z, lambda)

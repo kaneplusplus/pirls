@@ -5,17 +5,17 @@ template<typename ModelMatrixType, typename WeightMatrixType,
          typename ResponseType, typename BetaMatrixType>
 double update_coordinate(const unsigned int i, 
   const ModelMatrixType &X, const WeightMatrixType &W, const ResponseType &z, 
-  const double &lambda, const double &alpha, const BetaMatrixType &beta) {
+  const double &lambda, const double &alpha, const BetaMatrixType &beta,
+  const double thresh) {
   ModelMatrixType X_shed(X), X_col(X.col(i));
   BetaMatrixType beta_shed(beta);
   X_shed.shed_col(i);
   beta_shed.shed_row(i);
   double val = arma::mat((W*X_col).t() * (z - X_shed * beta_shed))[0];
-  double thresh = accu(W)*lambda*alpha;
   double ret = soft_thresh(val, thresh);
   // Assume W is a diagonal matrix.
   if (ret != 0) 
-    ret /= accu(W(i,i) * square(X_col)) + lambda*(1-alpha);
+    ret /= accu(W * square(X_col)) + lambda*(1-alpha);
   return ret;
 }
 
