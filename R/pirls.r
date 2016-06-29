@@ -22,7 +22,7 @@ NULL
 #' for the current weight matrix. Default is coordinate_descent.
 #' @export
 pirls = function(X, y, lambda, alpha=1, family=binomial, maxit=500, 
-                      tol=1e-8, beta=spMatrix(nrow=ncol(X), ncol=1), 
+                 tol=1e-8, beta=as(spMatrix(nrow=ncol(X), ncol=1), "dgCMatrix"),
                       beta_update=coordinate_descent) {
   converged = FALSE
   for(i in 1:maxit) {

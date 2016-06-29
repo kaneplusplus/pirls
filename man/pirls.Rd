@@ -5,7 +5,7 @@
 \title{Fit a Penalized Iteratively Reweighted Least Squares (PIRLS) model}
 \usage{
 pirls(X, y, lambda, alpha = 1, family = binomial, maxit = 500,
-  tol = 1e-08, beta = spMatrix(nrow = ncol(X), ncol = 1),
+  tol = 1e-08, beta = as(spMatrix(nrow = ncol(X), ncol = 1), "dgCMatrix"),
   beta_update = coordinate_descent)
 }
 \arguments{

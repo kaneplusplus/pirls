@@ -1,15 +1,15 @@
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::depends(RcppParallel)]]
+// // [[Rcpp::depends(RcppParallel)]]
 // [[Rcpp::depends(BH)]]
 
 #include <boost/iterator/counting_iterator.hpp>
 #include <RcppArmadillo.h>
-#include <RcppParallel.h>
+//#include <RcppParallel.h>
 #include <vector>
 
 #include "coordinate_descent.hpp"
 
-using namespace RcppParallel;
+//using namespace RcppParallel;
 using namespace boost;
 using namespace std::placeholders;
 
@@ -48,6 +48,7 @@ arma::sp_mat vec_to_col_sp_mat( const VecType &vec ) {
   return arma::sp_mat(locs, vals, vec.size(), 1);
 }
 
+/*
 template<typename ModelMatrixType, typename WeightMatrixType,
          typename ResponseType, typename BetaMatrixType>
 struct UpdateCoordinate : public Worker {
@@ -78,6 +79,7 @@ struct UpdateCoordinate : public Worker {
                                   _thresh);});
   }
 };
+*/
 
 // [[Rcpp::export]]
 arma::uvec c_safe_filter(arma::mat X, arma::mat z, double lambda) {
@@ -98,19 +100,19 @@ arma::sp_mat c_update_coordinates(arma::mat X, arma::sp_mat W,
   arma::mat z, double lambda, double alpha, arma::sp_mat beta, 
   bool parallel=false, unsigned int grain_size=100) {
     double thresh = accu(W)*lambda*alpha;
-    if (!parallel) {
+//    if (!parallel) {
       arma::sp_mat beta_new(beta);
       for (unsigned i=0; i < beta.n_rows; ++i) {
         beta(i, 0) = update_coordinate(i, X, W, z, lambda, alpha, beta, thresh);
       }
       return beta;
-    } else {
-      UpdateCoordinate<arma::mat, arma::sp_mat, arma::mat, arma::sp_mat> 
-        uc(X, W, z, beta, lambda, alpha, thresh);
-      parallelFor(0, beta.n_rows, uc, grain_size);
-      uc(0, beta.n_rows);
-      return vec_to_col_sp_mat(uc._output);
-    }
+//    } else {
+//      UpdateCoordinate<arma::mat, arma::sp_mat, arma::mat, arma::sp_mat> 
+//        uc(X, W, z, beta, lambda, alpha, thresh);
+//      parallelFor(0, beta.n_rows, uc, grain_size);
+//      uc(0, beta.n_rows);
+//      return vec_to_col_sp_mat(uc._output);
+//    }
 }
 
 // [[Rcpp::export]]

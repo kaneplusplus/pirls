@@ -11,5 +11,5 @@ License: GPL (>= 2)
 Imports:
     Rcpp (>= 0.12.4)
 SystemRequirements: C++11
-LinkingTo: Rcpp, RcppArmadillo, BH, RcppParallel
+LinkingTo: Rcpp, RcppArmadillo, BH
 RoxygenNote: 5.0.1

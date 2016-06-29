@@ -3,5 +3,6 @@
 export(pirls)
 export(safe_filter)
 export(soft_thresh_r)
+export(strong_filter)
 importFrom(Rcpp,sourceCpp)
 useDynLib(pirls)

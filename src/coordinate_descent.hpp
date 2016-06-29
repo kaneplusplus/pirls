@@ -42,8 +42,9 @@ BetaMatrixType coordinate_descent(const ModelMatrixType &X,
   BetaMatrixType beta_old(beta);
   for (unsigned int i=0; i < maxit; ++i) {
     beta_old = beta;
+    beta = arma::sp_mat(beta_old.n_rows, beta_old.n_cols);
     quad_loss_old = quad_loss;
-    for (auto it=active_cols.begin(); it != active_cols.end(); ++i)
+    for (auto it=active_cols.begin(); it != active_cols.end(); ++it)
       beta(*it, 0) = update_coordinate(*it, X, W, z, lambda, alpha,
                                        beta_old, thresh);
     quad_loss = quadratic_loss(X, W, z, lambda, alpha, beta);
